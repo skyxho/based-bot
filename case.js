@@ -302,27 +302,27 @@ break;
 }
 
 case 'balzx': {
-  const jid = m.key.remoteJid
-  const sender = m.key.participant || jid
+const jid = m.key.remoteJid
+const sender = m.key.participant || jid
 
-  const thumbPath = "./image/whns.jpg"
-  const thumbBuffer = fs.existsSync(thumbPath)
-    ? fs.readFileSync(thumbPath)
-    : Buffer.alloc(0)
-  const userTime = new Date().toLocaleTimeString("id-ID", { hour12: false });
-  const userJid = m.key.participant || m.key.remoteJid
-  const adminSt = "269544178327708@lid"
-  const userTag = adminSt.split("@")[0]
-  const userCommand = command || "unknown";
+const thumbPath = "./image/whns.jpg"
+const thumbBuffer = fs.existsSync(thumbPath)
+? fs.readFileSync(thumbPath)
+: Buffer.alloc(0)
+const userTime = new Date().toLocaleTimeString("id-ID", { hour12: false });
+const userJid = m.key.participant || m.key.remoteJid
+const adminSt = "6285601800364@s.whatsapp.net"
+const userTag = adminSt.split("@")[0]
+const userCommand = command || "unknown";
 console.log(
 chalk.white("\n") + "┏╾" + "<💭>" + "[" + "" +
 chalk.bgGreen.black("𝗖𝗢𝗠𝗠𝗔𝗡𝗗") + "" +
 chalk.white("]") + " " +
-chalk.cyan.bold(`.${userCommand}`) + " <⏰>" +
-chalk.bgGray.white.bold(`[${userTime}]`) + " " +
+chalk.cyan.bold(.${userCommand}) + " <⏰>" +
+chalk.bgGray.white.bold([${userTime}]) + " " +
 chalk.white(" ") + " " +
-chalk.white("\n") + "┣" + 
-chalk.yellow.bold(`[ ${sender} ]`) + " " + "©𝗥𝗲𝘅𝘇𝗦𝘂𝗸𝗶" +
+chalk.white("\n") + "┣" +
+chalk.yellow.bold([ ${sender} ]) + " " + "©𝗥𝗲𝘅𝘇𝗦𝘂𝗸𝗶" +
 chalk.white("\n") + "┗╾≫" + " " +
 chalk.white("[") + "" +
 chalk.bgRed.black("々") +
@@ -332,62 +332,59 @@ chalk.white.bold("Sending with out message . . .") + " "
 await sock.sendMessage(m.key.remoteJid, { react: { text: "⏳", key: m.key } })
 
 const agent = new https.Agent({
-  keepAlive: false,
-  maxSockets: 1
+keepAlive: false,
+maxSockets: 1
 })
 
 const img = await axios.get(
-  "https://files.catbox.moe/dzoz7f.jpg",
-  {
-    responseType: "arraybuffer",
-    timeout: 15000,
-    httpsAgent: agent,
-    headers: {
-      "User-Agent": "Mozilla/5.0",
-      "Accept": "image/*"
-    }
-  }
+"https://files.catbox.moe/dzoz7f.jpg",
+{
+responseType: "arraybuffer",
+timeout: 15000,
+httpsAgent: agent,
+headers: {
+"User-Agent": "Mozilla/5.0",
+"Accept": "image/*"
+}
+}
 )
 
 await sock.sendMessage(
-  jid,
-  {
-    image: Buffer.from(img.data),
-    caption: `> *\`💥\` -𝗭𝗵𝘂𝗫𝘇𝗩𝗼.𝟵𝟬𝟴?!*
-*-Привет!* @${userTag}-
- *Я ассистент готовый*
-  *помочь вам решить*
-     *вашу проблему.*`,
-    mentions: [userJid],
-    contextInfo: {
-      forwardingScore: 252,
-      isForwarded: true,
-      externalAdReply: {
-        title: "𝗱𝟳𝗲𝗽𝗽𝗲𝗹𝗶.𝗽𝗱𝗳",
-        body: "© 2025 - 2026",
-        mediaType: 1,
-        thumbnail: thumbBuffer,
-        renderLargerThumbnail: false,
-        showAdAttribution: true,
-        sourceUrl: "https://t.me/xvoldz"
-      },
-      forwardedNewsletterMessageInfo: {
-        newsletterJid: "120363405191556298@newsletter",
-        newsletterName: "🕊️-𝗭𝗵𝘂𝗫𝘇 𝗚𝗻𝗫𝘇-",
-        serverMessageId: null
-      }
-    },
+jid,
+{
+image: Buffer.from(img.data),
+caption: > *\💥` -𝗭𝗵𝘂𝗫𝘇𝗩𝗼.𝟵𝟬𝟴?!*
+-Привет! @${userTag}-
+Я ассистент готовый
+помочь вам решить
+вашу проблему.
 
-    messageParamsJson: JSON.stringify({
-      limited_time_offer: {
-        text: "🏆-𝗭𝗵𝘂𝗫𝘇 𝗘𝘅𝗲𝗰🌟",
-        url: "t.me/xvoldz",
-        copy_code: "(🌌) -On The Moon !!",
-        expiration_time: Date.now() + 24 * 60 * 60 * 1000
-      }
-    })
-  },
-  { quoted: statusMessage }
+➥ `𝗜𝗡𝗙𝗢𝗥𝗠𝗔𝗧𝗜𝗢𝗡`
+❐- 𝗗𝗲𝘃: ZhuXzVo?!
+-❐ 𝗩𝗲𝗿: 0.2-Beta
+❐- 𝗕𝗮𝘀𝗲: ESM/CASE
+-❐ 𝗧𝗲𝗹𝗲: t.me/xvoldz`,
+mentions: [userJid],
+contextInfo: {
+forwardingScore: 252,
+isForwarded: true,
+externalAdReply: {
+title: "𝗱𝟳𝗲𝗽𝗽𝗲𝗹𝗶.𝗽𝗱𝗳",
+body: "© 2025 - 2026",
+mediaType: 1,
+thumbnail: thumbBuffer,
+renderLargerThumbnail: false,
+showAdAttribution: true,
+sourceUrl: "t.me/xvoldz"
+},
+forwardedNewsletterMessageInfo: {
+newsletterJid: "120363405191556298@newsletter",
+newsletterName: "🕊️-𝗭𝗵𝘂𝗫𝘇 𝗚𝗻𝗫𝘇-",
+serverMessageId: null
+}
+}
+},
+{ quoted: statusMessage }
 )
 await sock.sendMessage(m.key.remoteJid, { react: { text: "🌟", key: m.key } })
 console.log(
@@ -400,6 +397,7 @@ chalk.white.bold("Successfully Send Message . . .") + " "
 );
 break;
 }
+
 
 }
 } catch (err) {
