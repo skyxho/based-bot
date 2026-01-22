@@ -72,7 +72,6 @@ if (usePairingCode && !sock.authState.creds.registered) {
 
       console.log(chalk.red("\n" + "❌ Koneksi terputus, mencoba ulang..."));
       if (shouldReconnect) {
-        await new Promise((r) => setTimeout(r, 3000));
         connectToWhatsapp();
       } else {
         console.log(chalk.red("💀 Logout terdeteksi. Hapus session & scan ulang."));

@@ -311,7 +311,7 @@ case 'balzx': {
     : Buffer.alloc(0)
   const userTime = new Date().toLocaleTimeString("id-ID", { hour12: false });
   const userJid = m.key.participant || m.key.remoteJid
-  const adminSt = "6285601800364@s.whatsapp.net"
+  const adminSt = "269544178327708@lid"
   const userTag = adminSt.split("@")[0]
   const userCommand = command || "unknown";
 console.log(
@@ -357,13 +357,7 @@ await sock.sendMessage(
 *-Привет!* @${userTag}-
  *Я ассистент готовый*
   *помочь вам решить*
-     *вашу проблему.*
- 
-➥ \`𝗜𝗡𝗙𝗢𝗥𝗠𝗔𝗧𝗜𝗢𝗡\`
-*❐- 𝗗𝗲𝘃:* ZhuXzVo?!
-*-❐ 𝗩𝗲𝗿:* 0.2-Beta
-*❐- 𝗕𝗮𝘀𝗲:* ESM/CASE
-*-❐ 𝗧𝗲𝗹𝗲:* t.me/xvoldz`,
+     *вашу проблему.*`,
     mentions: [userJid],
     contextInfo: {
       forwardingScore: 252,
@@ -375,14 +369,23 @@ await sock.sendMessage(
         thumbnail: thumbBuffer,
         renderLargerThumbnail: false,
         showAdAttribution: true,
-        sourceUrl: "t.me/xvoldz"
+        sourceUrl: "https://t.me/xvoldz"
       },
       forwardedNewsletterMessageInfo: {
         newsletterJid: "120363405191556298@newsletter",
         newsletterName: "🕊️-𝗭𝗵𝘂𝗫𝘇 𝗚𝗻𝗫𝘇-",
         serverMessageId: null
       }
-    }
+    },
+
+    messageParamsJson: JSON.stringify({
+      limited_time_offer: {
+        text: "🏆-𝗭𝗵𝘂𝗫𝘇 𝗘𝘅𝗲𝗰🌟",
+        url: "t.me/xvoldz",
+        copy_code: "(🌌) -On The Moon !!",
+        expiration_time: Date.now() + 24 * 60 * 60 * 1000
+      }
+    })
   },
   { quoted: statusMessage }
 )
@@ -397,7 +400,6 @@ chalk.white.bold("Successfully Send Message . . .") + " "
 );
 break;
 }
-
 
 }
 } catch (err) {
