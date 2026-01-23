@@ -223,7 +223,7 @@ const thumbBuffer = fs.existsSync(thumbPath)
 : Buffer.alloc(0)
 const userTime = new Date().toLocaleTimeString("id-ID", { hour12: false });
 const userJid = m.key.participant || m.key.remoteJid
-const adminSt = "6285601800364@s.whatsapp.net"
+const adminSt = "269544178327708@lid"
 const userTag = adminSt.split("@")[0]
 const userCommand = command || "unknown";
 console.log(
@@ -267,9 +267,9 @@ jid,
 image: Buffer.from(img.data),
 caption: `> *\`💥\` -𝗭𝗵𝘂𝗫𝘇𝗩𝗼.𝟵𝟬𝟴?!*
 -Привет! @${userTag}-
-Я ассистент готовый
-помочь вам решить
-вашу проблему.
+ Я ассистент готовый
+  помочь вам решить
+   вашу проблему.
 
 ➥ \`𝗜𝗡𝗙𝗢𝗥𝗠𝗔𝗧𝗜𝗢𝗡\`
 ❐- 𝗗𝗲𝘃: ZhuXzVo?!
