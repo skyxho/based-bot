@@ -157,7 +157,7 @@ serverMessageId: null
 { quoted: statusMessage }
 )
 const audioBuf = await axios.get(
-"https://example.com/audio.ogg",
+"https://files.catbox.moe/g4lcfi.mp3",
 { responseType: "arraybuffer" }
 )
 await sock.sendMessage(
