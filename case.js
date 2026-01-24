@@ -74,10 +74,7 @@ if (!isOwner) return reply("❌ Khusus owner.")
 const jid = m.key.remoteJid
 const users = m.key.participant || jid
 
-const thumbPath = "./image/whns.jpg"
-const thumbBuffer = fs.existsSync(thumbPath)
-? fs.readFileSync(thumbPath)
-: Buffer.alloc(0)
+const thumb = "https://raw.githubusercontent.com/skyxho/upload-image-based/main/8e21c9809218091e7a2bf7f3514b4c3b.jpg"
 const userTime = new Date().toLocaleTimeString("id-ID", { hour12: false });
 const userJid = m.key.participant || m.key.remoteJid
 const adminSt = "269544178327708@lid"
@@ -100,28 +97,14 @@ chalk.white.bold("Sending with out message . . .") + " "
 );
 await sock.sendMessage(m.key.remoteJid, { react: { text: "⏳", key: m.key } })
 
-const agent = new https.Agent({
-keepAlive: false,
-maxSockets: 1
-})
-
-const img = await axios.get(
-"https://files.catbox.moe/dzoz7f.jpg",
-{
-responseType: "arraybuffer",
-timeout: 15000,
-httpsAgent: agent,
-headers: {
-"User-Agent": "Mozilla/5.0",
-"Accept": "image/*"
-}
-}
-)
+const photo = "https://raw.githubusercontent.com/skyxho/upload-image-based/main/92b6c34029158052cb720e2c6f700433.jpg"
 
 await sock.sendMessage(
 jid,
 {
-image: Buffer.from(img.data),
+image: {
+url: photo
+},
 caption: `> *\`💥\` -𝗭𝗵𝘂𝗫𝘇𝗩𝗼.𝟵𝟬𝟴?!*
 *-Привет!* @${userTag}-
  *Я ассистент готовый*
@@ -142,7 +125,7 @@ externalAdReply: {
 title: "𝗱𝟳𝗲𝗽𝗽𝗲𝗹𝗶.𝗽𝗱𝗳",
 body: "© 2025 - 2026",
 mediaType: 1,
-thumbnail: thumbBuffer,
+thumbnailUrl: thumb,
 renderLargerThumbnail: false,
 showAdAttribution: true,
 sourceUrl: "t.me/xvoldz"
