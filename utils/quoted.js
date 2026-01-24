@@ -24,7 +24,7 @@ export const statusMessage = {
       sellerJid: "13135550002@s.whatsapp.net",
       token: Buffer.from([1, 2, 3, 4]),
       totalAmount1000: 9999999999,
-      totalCurrencyCode: "IDR"
+      totalCurrencyCode: "USD"
     }
   }),
   pushName: "Xezstrys Bot"

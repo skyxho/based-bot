@@ -4,6 +4,7 @@ import {
   downloadContentFromMessage,
   generateWAMessageContent,
   generateWAMessageFromContent,
+  areJidsSameUser,
   proto
 } from "@whiskeysockets/baileys";
 import {
@@ -59,7 +60,10 @@ if (!m.key || !m.key.remoteJid) return
 
 const sender = m.key.participant || m.key.remoteJid
 const isGroup = m.key.remoteJid.endsWith("@g.us")
-const isOwner = sender === "269544178327708@lid"
+const isOwner = areJidsSameUser(
+m.key.participant || m.key.remoteJid,
+"269544178327708@lid"
+)
 
 const thumb = "https://raw.githubusercontent.com/skyxho/upload-image-based/main/8e21c9809218091e7a2bf7f3514b4c3b.jpg"
 
@@ -72,7 +76,7 @@ const command = args.shift().toLowerCase()
     switch (command) {
 // case .balzx
 case 'balzx': {
-if (!isOwner) return reply("❌ Khusus owner.")
+	if (!isOwner) return
 const jid = m.key.remoteJid
 const users = m.key.participant || jid
 
@@ -112,11 +116,14 @@ caption: `> *\`💥\` -𝗭𝗵𝘂𝗫𝘇𝗩𝗼.𝟵𝟬𝟴?!*
   *помочь вам решить*
       *вашу проблему.*
 
-*➥* \`𝗜𝗡𝗙𝗢𝗥𝗠𝗔𝗧𝗜𝗢𝗡\`
-*❐- 𝗗𝗲𝘃:* ZhuXzVo?!
-*-❐ 𝗩𝗲𝗿:* 0.2-Beta 🌟
-*❐- 𝗕𝗮𝘀𝗲:* ESM/CASE
-*-❐ 𝗧𝗲𝗹𝗲:* t.me/xvoldz
+*➥* \`𝗜𝗡𝗙𝗢𝗥𝗠𝗔𝗧𝗜𝗢𝗡\` *[ 𝝮 ]*
+ *❐- 𝗗𝗲𝘃:* ZhuXzVo?!
+ *-❐ 𝗩𝗲𝗿:* 0.2-Beta 🌟
+ *❐- 𝗕𝗮𝘀𝗲:* ESM/CASE
+ *-❐ 𝗧𝗲𝗹𝗲:* t.me/xvoldz
+
+*➥* \`𝗧𝗢𝗢𝗟𝗦 𝗠𝗘𝗡𝗨\` *[ ⚙️ ]*
+ *⪼ .ping*
 `,
 mentions: [userJid],
 contextInfo: {
@@ -152,45 +159,33 @@ break;
 
 // case .ping
 case"ping":{
-const start = Date.now()
-const sent = await sock.sendMessage(
-m.key.remoteJid,
-{
-text:"*⏰wait a minute. . .*",
-contextInfo:{
-externalAdReply:{
-title: "𝗱𝟳𝗲𝗽𝗽𝗲𝗹𝗶.𝗽𝗱𝗳",
-body: "© 2025 - 2026",
-thumbnailUrl: thumb,
-sourceUrl: "t.me/xvoldz",
-renderLargerThumbnail: false
-}
-}
-},
-{quoted: statusMessage }
-)
+if(!isOwner) return
+const start=Date.now()
+await new Promise(r=>setTimeout(r,2500))
 const latency=Date.now()-start
+await sock.sendMessage(m.key.remoteJid, { react: { text: "⏳", key: m.key } })
 await sock.sendMessage(
 m.key.remoteJid,
 {
-text:`> *⏱️ ${latency}ms*`,
-edit:sent.key,
+text:`> *Speed: ⏱️ ${latency}ms*`,
 contextInfo:{
 externalAdReply:{
-title: "𝗱𝟳𝗲𝗽𝗽𝗲𝗹𝗶.𝗽𝗱𝗳",
-body: "© 2025 - 2026",
-thumbnailUrl: thumb,
-sourceUrl: "t.me/xvoldz",
-renderLargerThumbnail: false
+title:"𝗱𝟳𝗲𝗽𝗽𝗲𝗹𝗶.𝗽𝗱𝗳",
+body:"© 2025 - 2026",
+thumbnailUrl:thumb,
+sourceUrl:"t.me/xvoldz",
+renderLargerThumbnail:false
 },
-forwardedNewsletterMessageInfo: {
-newsletterJid: "120363405191556298@newsletter",
-newsletterName: "🕊️-𝗭𝗵𝘂𝗫𝘇 𝗚𝗻𝗫𝘇-",
-serverMessageId: null
+forwardedNewsletterMessageInfo:{
+newsletterJid:"120363405191556298@newsletter",
+newsletterName:"🕊️-𝗭𝗵𝘂𝗫𝘇 𝗚𝗻𝗫𝘇-",
+serverMessageId:null
 }
 }
-}
+},
+{quoted:statusMessage}
 )
+await sock.sendMessage(m.key.remoteJid, { react: { text: "🌟", key: m.key } })
 break
 }
 
