@@ -124,10 +124,8 @@ isForwarded: true,
 externalAdReply: {
 title: "𝗱𝟳𝗲𝗽𝗽𝗲𝗹𝗶.𝗽𝗱𝗳",
 body: "© 2025 - 2026",
-mediaType: 1,
 thumbnailUrl: thumb,
 renderLargerThumbnail: false,
-showAdAttribution: true,
 sourceUrl: "t.me/xvoldz"
 },
 forwardedNewsletterMessageInfo: {
