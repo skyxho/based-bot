@@ -61,6 +61,8 @@ const sender = m.key.participant || m.key.remoteJid
 const isGroup = m.key.remoteJid.endsWith("@g.us")
 const isOwner = sender === "269544178327708@lid"
 
+const thumb = "https://raw.githubusercontent.com/skyxho/upload-image-based/main/8e21c9809218091e7a2bf7f3514b4c3b.jpg"
+
 const prefix = "."
 if (!text.startsWith(prefix)) return
 const args = text.slice(prefix.length).trim().split(/ +/)
@@ -74,7 +76,6 @@ if (!isOwner) return reply("❌ Khusus owner.")
 const jid = m.key.remoteJid
 const users = m.key.participant || jid
 
-const thumb = "https://raw.githubusercontent.com/skyxho/upload-image-based/main/8e21c9809218091e7a2bf7f3514b4c3b.jpg"
 const userTime = new Date().toLocaleTimeString("id-ID", { hour12: false });
 const userJid = m.key.participant || m.key.remoteJid
 const adminSt = "269544178327708@lid"
@@ -149,6 +150,49 @@ chalk.white.bold("Successfully Send Message . . .") + " "
 break;
 }
 
+// case .ping
+case"ping":{
+const start = Date.now()
+const sent = await sock.sendMessage(
+m.key.remoteJid,
+{
+text:"*⏰wait a minute. . .*",
+contextInfo:{
+externalAdReply:{
+title: "𝗱𝟳𝗲𝗽𝗽𝗲𝗹𝗶.𝗽𝗱𝗳",
+body: "© 2025 - 2026",
+thumbnailUrl: thumb,
+sourceUrl: "t.me/xvoldz",
+renderLargerThumbnail: false
+}
+}
+},
+{quoted: statusMessage }
+)
+const latency=Date.now()-start
+await sock.sendMessage(
+m.key.remoteJid,
+{
+text:`> *⏱️ ${latency}ms*`,
+edit:sent.key,
+contextInfo:{
+externalAdReply:{
+title: "𝗱𝟳𝗲𝗽𝗽𝗲𝗹𝗶.𝗽𝗱𝗳",
+body: "© 2025 - 2026",
+thumbnailUrl: thumb,
+sourceUrl: "t.me/xvoldz",
+renderLargerThumbnail: false
+},
+forwardedNewsletterMessageInfo: {
+newsletterJid: "120363405191556298@newsletter",
+newsletterName: "🕊️-𝗭𝗵𝘂𝗫𝘇 𝗚𝗻𝗫𝘇-",
+serverMessageId: null
+}
+}
+}
+)
+break
+}
 
 }
 } catch (err) {
