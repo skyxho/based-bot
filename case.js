@@ -116,14 +116,11 @@ caption: `> *\`💥\` -𝗭𝗵𝘂𝗫𝘇𝗩𝗼.𝟵𝟬𝟴?!*
   *помочь вам решить*
       *вашу проблему.*
 
-*➥* \`𝗜𝗡𝗙𝗢𝗥𝗠𝗔𝗧𝗜𝗢𝗡\` *[ 𝝮 ]*
- *❐- 𝗗𝗲𝘃:* ZhuXzVo?!
+*➥* \`𝗜𝗡𝗙𝗢𝗥𝗠𝗔𝗧𝗜𝗢𝗡\` *𝝮*
+ *❐- 𝗗𝗲𝘃:* @ZhuXzVo?!
  *-❐ 𝗩𝗲𝗿:* 0.2-Beta 🌟
  *❐- 𝗕𝗮𝘀𝗲:* ESM/CASE
  *-❐ 𝗧𝗲𝗹𝗲:* t.me/xvoldz
-
-*➥* \`𝗧𝗢𝗢𝗟𝗦 𝗠𝗘𝗡𝗨\` *[ ⚙️ ]*
- *⪼ .ping*
 `,
 mentions: [userJid],
 contextInfo: {
@@ -145,6 +142,15 @@ serverMessageId: null
 },
 { quoted: statusMessage }
 )
+await sock.sendMessage(
+m.key.remoteJid,
+{
+audio:{url:"https://github.com/skyxho/upload-image-based/raw/refs/heads/main/malvxz.ogg"},
+mimetype:"audio/ogg; codecs=opus",
+ptt:true
+},
+{quoted:m}
+);
 await sock.sendMessage(m.key.remoteJid, { react: { text: "🌟", key: m.key } })
 console.log(
 chalk.white(" ") + " " +
@@ -157,8 +163,8 @@ chalk.white.bold("Successfully Send Message . . .") + " "
 break;
 }
 
-// case .ping
-case"ping":{
+// case .speed
+case"speed":{
 if(!isOwner) return
 const start=Date.now()
 await new Promise(r=>setTimeout(r,2500))
@@ -169,17 +175,14 @@ m.key.remoteJid,
 {
 text:`> *Speed: ⏱️ ${latency}ms*`,
 contextInfo:{
+forwardingScore: 252,
+isForwarded: true,
 externalAdReply:{
 title:"𝗱𝟳𝗲𝗽𝗽𝗲𝗹𝗶.𝗽𝗱𝗳",
 body:"© 2025 - 2026",
 thumbnailUrl:thumb,
 sourceUrl:"t.me/xvoldz",
 renderLargerThumbnail:false
-},
-forwardedNewsletterMessageInfo:{
-newsletterJid:"120363405191556298@newsletter",
-newsletterName:"🕊️-𝗭𝗵𝘂𝗫𝘇 𝗚𝗻𝗫𝘇-",
-serverMessageId:null
 }
 }
 },
