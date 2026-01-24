@@ -55,6 +55,8 @@ async function getThumbBuffer(url) {
   return Buffer.from(res.data)
 }
 
+if (!m.key || !m.key.remoteJid) return
+
 const sender = m.key.participant || m.key.remoteJid
 const isGroup = m.key.remoteJid.endsWith("@g.us")
 const isOwner = sender === "269544178327708@lid"
@@ -64,15 +66,13 @@ if (!text.startsWith(prefix)) return
 const args = text.slice(prefix.length).trim().split(/ +/)
 const command = args.shift().toLowerCase()
  
- if (!m.key || !m.key.remoteJid) return
- 
  // ======== CASE BOT ======== //
     switch (command) {
 // case .balzx
 case 'balzx': {
 if (!isOwner) return reply("❌ Khusus owner.")
 const jid = m.key.remoteJid
-const sender = m.key.participant || jid
+const users = m.key.participant || jid
 
 const thumbPath = "./image/whns.jpg"
 const thumbBuffer = fs.existsSync(thumbPath)
@@ -91,7 +91,7 @@ chalk.cyan.bold(`.${userCommand}`) + " <⏰>" +
 chalk.bgGray.white.bold(`[${userTime}]`) + " " +
 chalk.white(" ") + " " +
 chalk.white("\n") + "┣" +
-chalk.yellow.bold(`[ ${sender} ]`) + " " + "©𝗥𝗲𝘅𝘇𝗦𝘂𝗸𝗶" +
+chalk.yellow.bold(`[ ${users} ]`) + " " + "©𝗥𝗲𝘅𝘇𝗦𝘂𝗸𝗶" +
 chalk.white("\n") + "┗╾≫" + " " +
 chalk.white("[") + "" +
 chalk.bgRed.black("々") +
@@ -123,10 +123,10 @@ jid,
 {
 image: Buffer.from(img.data),
 caption: `> *\`💥\` -𝗭𝗵𝘂𝗫𝘇𝗩𝗼.𝟵𝟬𝟴?!*
-*-Привет! @${userTag}-*
+*-Привет!* @${userTag}-
  *Я ассистент готовый*
   *помочь вам решить*
-     *вашу проблему.*
+      *вашу проблему.*
 
 *➥* \`𝗜𝗡𝗙𝗢𝗥𝗠𝗔𝗧𝗜𝗢𝗡\`
 *❐- 𝗗𝗲𝘃:* ZhuXzVo?!
@@ -155,19 +155,6 @@ serverMessageId: null
 }
 },
 { quoted: statusMessage }
-)
-const audioBuf = await axios.get(
-"https://files.catbox.moe/g4lcfi.mp3",
-{ responseType: "arraybuffer" }
-)
-await sock.sendMessage(
-jid,
-{
-audio: Buffer.from(audioBuf.data),
-mimetype: "audio/ogg; codecs=opus",
-ptt: true
-},
-{ quoted: m }
 )
 await sock.sendMessage(m.key.remoteJid, { react: { text: "🌟", key: m.key } })
 console.log(
