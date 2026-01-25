@@ -13,6 +13,9 @@ import {
 import {
  statusMessage
 } from "./utils/quoted.js";
+import {
+ devEval 
+} from "./utils/dev.js";
 import crypto from "crypto";
 import chalk from "chalk";
 import axios from "axios";
@@ -71,7 +74,14 @@ const prefix = "."
 if (!text.startsWith(prefix)) return
 const args = text.slice(prefix.length).trim().split(/ +/)
 const command = args.shift().toLowerCase()
- 
+
+const body =
+  msg.conversation ||
+  msg.extendedTextMessage?.text ||
+  msg.imageMessage?.caption ||
+  ""
+if (await devEval({ body, m, sock, isOwner })) return
+
  // ======== CASE BOT ======== //
     switch (command) {
 // case .balzx
