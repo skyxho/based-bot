@@ -102,7 +102,7 @@ chalk.white.bold("Sending with out message . . .") + " "
 );
 await sock.sendMessage(m.key.remoteJid, { react: { text: "⏳", key: m.key } })
 
-const photo = "https://raw.githubusercontent.com/skyxho/upload-image-based/main/92b6c34029158052cb720e2c6f700433.jpg"
+const photo = "https://github.com/skyxho/upload-image-based/raw/refs/heads/main/IMG-20260125-WA0119.jpg"
 
 await sock.sendMessage(
 jid,
