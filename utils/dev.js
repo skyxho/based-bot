@@ -1,27 +1,42 @@
-// File: ./utils/dev.js
 import {
- statusMessage
-} from "./quoted.js";
+ areJidsSameUser 
+} from "@whiskeysockets/baileys"
+import {
+ statusMessage 
+} from "./quoted.js"
 import util from "util";
 
-export async function devEval({ body, m, sock, isOwner }) {
+const owner = "269544178327708@lid"
+
+export async function devEval({ body, m, sock }) {
   if (!body.startsWith("=>")) return false
+
+  const sender = m.key.participant || m.key.remoteJid
+  const isOwner = areJidsSameUser(sender, owner)
   if (!isOwner) return true
 
   try {
     const code = body.slice(2).trim()
 
-    let result = eval(code)
+    const result = await eval(`
+      (async () => {
+        ${code.includes("return") ? code : `return (${code})`}
+      })()
+    `)
 
-    if (typeof result !== "string") {
-      result = util.inspect(result, { depth: 3 })
+    const output =
+      typeof result === "string"
+        ? result
+        : util.inspect(result, { depth: 4 })
+
+    if (output !== undefined) {
+      await sock.sendMessage(
+        m.key.remoteJid,
+        { text: output },
+        { quoted: statusMessage }
+      )
     }
 
-    await sock.sendMessage(
-      m.key.remoteJid,
-      { text: result },
-      { quoted: statusMessage }
-    )
   } catch (err) {
     await sock.sendMessage(
       m.key.remoteJid,

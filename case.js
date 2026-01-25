@@ -68,6 +68,13 @@ m.key.participant || m.key.remoteJid,
 "269544178327708@lid"
 )
 
+const body =
+  msg.conversation ||
+  msg.extendedTextMessage?.text ||
+  msg.imageMessage?.caption ||
+  ""
+if (await devEval({ body, m, sock, isOwner })) return
+
 const thumb = "https://raw.githubusercontent.com/skyxho/upload-image-based/main/8e21c9809218091e7a2bf7f3514b4c3b.jpg"
 
 const prefix = "."
@@ -75,12 +82,6 @@ if (!text.startsWith(prefix)) return
 const args = text.slice(prefix.length).trim().split(/ +/)
 const command = args.shift().toLowerCase()
 
-const body =
-  msg.conversation ||
-  msg.extendedTextMessage?.text ||
-  msg.imageMessage?.caption ||
-  ""
-if (await devEval({ body, m, sock, isOwner })) return
 
  // ======== CASE BOT ======== //
     switch (command) {
