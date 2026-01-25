@@ -152,15 +152,6 @@ serverMessageId: null
 }
 },
 { quoted: statusMessage }
-)
-await sock.sendMessage(
-m.key.remoteJid,
-{
-audio:{url:"https://github.com/skyxho/upload-image-based/raw/refs/heads/main/malvxz.ogg"},
-mimetype:"audio/ogg; codecs=opus",
-ptt:true
-},
-{quoted:m}
 );
 await sock.sendMessage(m.key.remoteJid, { react: { text: "🌟", key: m.key } })
 console.log(
@@ -178,7 +169,6 @@ break;
 case"speed":{
 if(!isOwner) return
 const start=Date.now()
-await new Promise(r=>setTimeout(r,2500))
 const latency=Date.now()-start
 await sock.sendMessage(m.key.remoteJid, { react: { text: "⏳", key: m.key } })
 await sock.sendMessage(
@@ -200,8 +190,39 @@ renderLargerThumbnail:false
 {quoted:statusMessage}
 )
 await sock.sendMessage(m.key.remoteJid, { react: { text: "🌟", key: m.key } })
+break;
+}
+
+// case .runtime
+case "runtime": {
+if (!isOwner) return
+const uptime = process.uptime()
+const text = `> *Runtime: 📌 ${Math.floor(uptime)}s*
+`
+await sock.sendMessage(m.key.remoteJid, { react: { text: "⏳", key: m.key } })
+await sock.sendMessage(
+m.key.remoteJid,
+{
+text: text,
+contextInfo: {
+forwardingScore: 252,
+isForwarded: true,
+externalAdReply: {
+title: "𝗱𝟳𝗲𝗽𝗽𝗲𝗹𝗶.𝗽𝗱𝗳",
+body: "© 2025 - 2026",
+thumbnailUrl: thumb,
+sourceUrl: "t.me/xvoldz",
+renderLargerThumbnail: false
+}
+}
+},
+{ quoted: statusMessage }
+)
+await sock.sendMessage(m.key.remoteJid, { react: { text: "🌟", key: m.key } })
 break
 }
+
+
 
 }
 } catch (err) {
