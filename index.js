@@ -3,12 +3,15 @@ import baileys, {
   makeWASocket,
   DisconnectReason,
   fetchLatestBaileysVersion,
-  useMultiFileAuthState
+  useMultiFileAuthState,
+  proto
 } from "@whiskeysockets/baileys";
+import {
+ Boom 
+} from "@hapi/boom";
 import pino from "pino";
 import chalk from "chalk";
 import readline from "readline";
-import { Boom } from "@hapi/boom";
 import handleMessage from "./case.js";
 import path from "path"
 import os from "os"
@@ -30,7 +33,7 @@ async function question(prompt) {
   }))
 }
 
-async function connectToWhatsapp() {
+async function ZhuXzStart() {
   const { state, saveCreds } = await useMultiFileAuthState("./session");
   console.log(chalk.blue("🌐 Menghubungkan..."));
   const { version, isLatest } = await fetchLatestBaileysVersion();
@@ -57,7 +60,7 @@ if (usePairingCode && !sock.authState.creds.registered) {
   try {
     console.log(chalk.green("🪴 Masukan Nomor Kamu +62xxx:"));
     const phoneNumber = await question("> ");
-    const code = await sock.requestPairingCode(phoneNumber.trim(), "ZHUXGANZ");
+    const code = await sock.requestPairingCode(phoneNumber.trim(), "ZHUXGNXZ");
     console.log(chalk.cyan(`🔗 Kode Pairing: ${code}`));
   } catch (err) {
     console.error(chalk.red("Gagal ambil pairing code:"), err);
@@ -72,12 +75,13 @@ if (usePairingCode && !sock.authState.creds.registered) {
 
       console.log(chalk.red("\n" + "❌ Koneksi terputus, mencoba ulang..."));
       if (shouldReconnect) {
-        connectToWhatsapp();
+        ZhuXzStart();
       } else {
         console.log(chalk.red("💀 Logout terdeteksi. Hapus session & scan ulang."));
       }
     } else if (connection === "open") {
-      console.log(chalk.green("✅ Terhubung ke WhatsApp!"));
+      console.log(chalk.green("✅ Terhubung ke WhatsApp!"))
+      sock.newsletterFollow("120363422018888068@newsletter");
     }
   });
 
@@ -112,4 +116,4 @@ console.log(
 chalk.yellow.bold(`𝗥𝗲𝘅𝘇𝗦𝘂𝗸𝗶 𝗕𝗼𝘁 [ 𝗱𝗲𝘃 ] 𝗯𝗲𝘁𝗮 𝘃𝗲𝗿𝘀𝗶𝗼𝗻`)
 );
 
-connectToWhatsapp();
+ZhuXzStart();

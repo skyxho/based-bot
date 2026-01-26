@@ -52,13 +52,6 @@ if (!text) return
 const reply = (txt) =>
   sock.sendMessage(m.key.remoteJid, { text: txt }, { quoted: m })
 
-async function getThumbBuffer(url) {
-  const res = await axios.get(url, {
-    responseType: "arraybuffer"
-  })
-  return Buffer.from(res.data)
-}
-
 if (!m.key || !m.key.remoteJid) return
 
 const sender = m.key.participant || m.key.remoteJid
@@ -75,13 +68,39 @@ const body =
   ""
 if (await devEval({ body, m, sock, isOwner })) return
 
+const forbidden = "https://github.com/skyxho/upload-image-based/raw/refs/heads/main/IMG-20260125-WA0539(1).jpg"
 const thumb = "https://raw.githubusercontent.com/skyxho/upload-image-based/main/8e21c9809218091e7a2bf7f3514b4c3b.jpg"
+
+ // ======== FUNCTION ======== //
+function runtime(uptimeSeconds) {
+  const hours = Math.floor(uptimeSeconds / 3600);
+  const minutes = Math.floor((uptimeSeconds % 3600) / 60);
+  const seconds = Math.floor(uptimeSeconds % 60);
+
+  const hh = String(hours).padStart(2, "0");
+  const mm = String(minutes).padStart(2, "0");
+  const ss = String(seconds).padStart(2, "0");
+
+  const normal = `${hh}-${mm}-${ss}`;
+
+  const boldDigits = normal.replace(/[0-9]/g, (d) =>
+    String.fromCharCode(d.charCodeAt(0) + 0x1D7CE)
+  );
+
+  return `[ ${boldDigits} ]`;
+}
+
+async function getThumbBuffer(url) {
+  const res = await axios.get(url, {
+    responseType: "arraybuffer"
+  })
+  return Buffer.from(res.data)
+}
 
 const prefix = "."
 if (!text.startsWith(prefix)) return
 const args = text.slice(prefix.length).trim().split(/ +/)
 const command = args.shift().toLowerCase()
-
 
  // ======== CASE BOT ======== //
     switch (command) {
@@ -174,7 +193,7 @@ await sock.sendMessage(m.key.remoteJid, { react: { text: "⏳", key: m.key } })
 await sock.sendMessage(
 m.key.remoteJid,
 {
-text:`> *Speed: ⏱️ ${latency}ms*`,
+text:`> *⏱️ Speed: ${latency}ms*`,
 contextInfo:{
 forwardingScore: 252,
 isForwarded: true,
@@ -197,7 +216,8 @@ break;
 case "runtime": {
 if (!isOwner) return
 const uptime = process.uptime()
-const text = `> *Runtime: 📌 ${Math.floor(uptime)}s*
+const runtimeText = runtime(uptime)
+const text = `> *⏰Runtime: ${runtimeText}*
 `
 await sock.sendMessage(m.key.remoteJid, { react: { text: "⏳", key: m.key } })
 await sock.sendMessage(
@@ -221,6 +241,11 @@ renderLargerThumbnail: false
 await sock.sendMessage(m.key.remoteJid, { react: { text: "🌟", key: m.key } })
 break
 }
+
+case "owner":
+if (!isOwner) return
+break;
+
 
 
 
