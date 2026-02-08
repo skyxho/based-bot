@@ -80,8 +80,7 @@ if (usePairingCode && !sock.authState.creds.registered) {
         console.log(chalk.red("💀 Logout terdeteksi. Hapus session & scan ulang."));
       }
     } else if (connection === "open") {
-      console.log(chalk.green("✅ Terhubung ke WhatsApp!"))
-      sock.newsletterFollow("120363422018888068@newsletter");
+      console.log(chalk.green("✅ Terhubung ke WhatsApp!"));
     }
   });
 
