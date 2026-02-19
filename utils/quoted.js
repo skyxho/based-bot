@@ -29,3 +29,28 @@ export const statusMessage = {
   }),
   pushName: "Xezstrys Bot"
 };
+
+export const XR = { 
+key: { 
+remoteJid: '0@s.whatsapp.net', 
+fromMe: false, 
+id: `3g4n-x1z4`, 
+participant: '18002428478@s.whatsapp.net' }, 
+message: { 
+requestPaymentMessage: { 
+currencyCodeIso4217: "USD", 
+amount1000: 8256, 
+requestFrom: '0@s.whatsapp.net', noteMessage: { 
+extendedTextMessage: { 
+text: `-𝗭𝗵𝘂𝗫𝘇𝗩𝗼.𝟳𝟳𝟴💥` 
+} 
+}, 
+expiryTimestamp: 2026, 
+amount: { 
+value: 2026, 
+offset: 2620, 
+currencyCode: "USD" 
+}
+}
+}
+}

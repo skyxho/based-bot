@@ -11,7 +11,8 @@ import {
  Buffer 
 } from "buffer";
 import {
- statusMessage
+ statusMessage,
+ XR
 } from "./utils/quoted.js";
 import {
  devEval 
@@ -59,12 +60,10 @@ const getQuotedMessage = (m) => {
 
   if (!msg) return null;
 
-  // unwrap ephemeral
   if (msg.ephemeralMessage) {
     msg = msg.ephemeralMessage.message;
   }
 
-  // unwrap view once
   if (msg.viewOnceMessage || msg.viewOnceMessageV2) {
     msg = (msg.viewOnceMessage || msg.viewOnceMessageV2).message;
   }
@@ -74,12 +73,10 @@ const getQuotedMessage = (m) => {
 
   let q = ext.contextInfo.quotedMessage;
 
-  // unwrap quoted ephemeral
   if (q.ephemeralMessage) {
     q = q.ephemeralMessage.message;
   }
 
-  // unwrap quoted view once
   if (q.viewOnceMessage || q.viewOnceMessageV2) {
     q = (q.viewOnceMessage || q.viewOnceMessageV2).message;
   }
@@ -235,6 +232,76 @@ chalk.white.bold("Successfully Send Message . . .") + " "
 break;
 }
 
+// case .mbud
+case 'mbud': {
+	if (!isOwner) return
+const jid = m.key.remoteJid
+const users = m.key.participant || jid
+
+const userTime = new Date().toLocaleTimeString("id-ID", { hour12: false });
+const userJid = m.key.participant || m.key.remoteJid
+const adminSt = "269544178327708@lid"
+const userTag = adminSt.split("@")[0]
+const userCommand = command || "unknown";
+const alwayss = "https://raw.githubusercontent.com/skyxho/upload-image-based/refs/heads/main/0b589484f3d69f870cea444c7ccadf18.jpg";
+console.log(
+chalk.white("\n") + "┏╾" + "<💭>" + "[" + "" +
+chalk.bgGreen.black("𝗖𝗢𝗠𝗠𝗔𝗡𝗗") + "" +
+chalk.white("]") + " " +
+chalk.cyan.bold(`.${userCommand}`) + " <⏰>" +
+chalk.bgGray.white.bold(`[${userTime}]`) + " " +
+chalk.white(" ") + " " +
+chalk.white("\n") + "┣" +
+chalk.yellow.bold(`[ ${users} ]`) + " " + "©𝗥𝗲𝘅𝘇𝗦𝘂𝗸𝗶" +
+chalk.white("\n") + "┗╾≫" + " " +
+chalk.white("[") + "" +
+chalk.bgRed.black("々") +
+chalk.white("]") + " " +
+chalk.white.bold("Sending with out message . . .") + " "
+);
+await sock.sendMessage(m.key.remoteJid, { react: { text: "⏳", key: m.key } })
+
+const photo = "https://github.com/skyxho/upload-image-based/raw/refs/heads/main/1735ff27bca2a113feb1d189f1222ad3.jpg"
+
+await sock.sendMessage(
+jid,
+{
+image: {
+url: photo
+},
+caption: `          *goоgle.com*`,
+mentions: [userJid],
+contextInfo: {
+forwardingScore: 252,
+isForwarded: true,
+externalAdReply: {
+title: "𝗠𝗿.𝗬𝗼𝘂𝘁𝗮𝗸𝗮?",
+body: "© 2025 - 2026",
+thumbnailUrl: alwayss,
+renderLargerThumbnail: false,
+sourceUrl: "t.me/xvoldz"
+},
+forwardedNewsletterMessageInfo: {
+newsletterJid: "120363405191556298@newsletter",
+newsletterName: "𝐘𝐓: 𝐘𝐨𝐤𝐚𝐭𝐚.𝐅𝐥𝐚𝐠'𝐬",
+serverMessageId: null
+}
+}
+},
+{ quoted: XR }
+);
+await sock.sendMessage(m.key.remoteJid, { react: { text: "🌟", key: m.key } })
+console.log(
+chalk.white(" ") + " " +
+chalk.white("[") + "" +
+chalk.bgBlue.black("𝗦𝗧𝗔𝗧𝗨𝗦") + "" +
+chalk.white("]") + " " + "<" +
+chalk.bgGreen.black("✅") + ">" + " " +
+chalk.white.bold("Successfully Send Message . . .") + " "
+);
+break;
+}
+
 // case .speed
 case"speed":{
 if(!isOwner) return
@@ -328,7 +395,7 @@ if (args.length > 0 && args[0].endsWith("@g.us")) {
 
   if (!quotedMsg) {
     content = { text: caption || " " };
-    options.backgroundColor = "#2e2e2e";
+    options.backgroundColor = "#000000";
   }
 
   else {
@@ -497,7 +564,7 @@ if (mediaKey === "imageMessage") {
 
   try {
     await sock.sendMessage(targetJid, content, {
-      quoted: statusMessage
+      quoted: XR
     });
 
     reply("*✅ Berhasil post ke grup target*");
@@ -508,7 +575,186 @@ if (mediaKey === "imageMessage") {
   break;
 }
 
+case "tovn": {
+    try {
+        const ctx = msg.message?.extendedTextMessage?.contextInfo;
 
+        // react loading
+        await sock.sendMessage(m.key.remoteJid, { react: { text: "⏳", key: m.key } });
+
+        // download audio
+        const stream = await downloadContentFromMessage(ctx.quotedMessage, "audio");
+        let buffer = Buffer.from([]);
+        for await (const chunk of stream) buffer = Buffer.concat([buffer, chunk]);
+
+        // temp file
+        const tempDir = path.resolve("./temp");
+        await fs.promises.mkdir(tempDir, { recursive: true });
+        const audioPath = path.join(tempDir, `input_${Date.now()}.ogg`);
+        const opusPath = path.join(tempDir, `output_${Date.now()}.opus`);
+        await fs.promises.writeFile(audioPath, buffer);
+
+        // convert ke opus
+        await new Promise((resolve, reject) => {
+            const ffmpeg = spawn("ffmpeg", [
+                "-i", audioPath,
+                "-c:a", "libopus",
+                "-b:a", "128k",
+                "-ar", "16000",
+                "-ac", "1",
+                "-vbr", "on",
+                "-application", "voip",
+                "-f", "opus",
+                "-y",
+                opusPath
+            ]);
+            ffmpeg.on("close", code => code === 0 ? resolve() : reject(new Error(`FFmpeg exited with code ${code}`)));
+            ffmpeg.on("error", reject);
+        });
+
+        // kirim VN
+        await sock.sendMessage(m.key.remoteJid, {
+            audio: fs.readFileSync(opusPath),
+            mimetype: "audio/ogg; codecs=opus",
+            ptt: true
+        }, { quoted: msg });
+
+        // cleanup
+        await fs.promises.unlink(audioPath).catch(() => {});
+        await fs.promises.unlink(opusPath).catch(() => {});
+
+    } catch (err) {
+        console.error("❌ ToVn Error:", err);
+        reply(`*⚠️ Gagal ubah ke VN:* ${err.message}`);
+    }
+    break;
+}
+
+case "sw": {
+  if (!isOwner) return reply("*Owner only*");
+
+  if (args.length < 1) return reply("*example: .swgc 120363333246957858@g.us Hallo semua*");
+
+  let targetJid = args[0];
+  if (!targetJid.endsWith("@g.us")) return reply("*ID grup tidak valid (@g.us)*");
+
+  let caption = args.slice(1).join(" ").trim();
+
+  const options = { upload: sock.waUploadToServer };
+  let content = {};
+
+  let quotedMsg = getQuotedMessage(m);
+
+  // ambil metadata target grup untuk mentions
+  let mentions = [];
+  try {
+    const metadata = await sock.groupMetadata(targetJid);
+    mentions = metadata.participants.map(p => p.id);
+  } catch (e) {
+    console.error("Metadata grup error:", e);
+  }
+
+  let directMsg = m.message;
+  if (directMsg?.ephemeralMessage) directMsg = directMsg.ephemeralMessage.message;
+  if (directMsg?.viewOnceMessage || directMsg?.viewOnceMessageV2) {
+    directMsg = (directMsg.viewOnceMessage || directMsg.viewOnceMessageV2).message;
+  }
+
+  if (!quotedMsg) {
+    if (directMsg?.imageMessage) quotedMsg = { imageMessage: directMsg.imageMessage };
+    else if (directMsg?.videoMessage) quotedMsg = { videoMessage: directMsg.videoMessage };
+    else if (directMsg?.audioMessage) quotedMsg = { audioMessage: directMsg.audioMessage };
+  }
+
+  if (!quotedMsg) {
+    content = { text: caption || " ", mentions };
+    options.backgroundColor = "#000000";
+  } else {
+    const mediaKey =
+      quotedMsg.imageMessage ? "imageMessage" :
+      quotedMsg.videoMessage ? "videoMessage" :
+      quotedMsg.audioMessage ? "audioMessage" :
+      null;
+
+    if (!mediaKey) return reply("*reply media untuk .swgc*");
+
+    const mime = quotedMsg[mediaKey]?.mimetype || "";
+
+    if (mediaKey === "imageMessage") {
+      const buf = await downloadQuoted("image", quotedMsg.imageMessage);
+      content = { image: buf, caption: caption || undefined, mentions };
+    } else if (mediaKey === "videoMessage") {
+      const buf = await downloadQuoted("video", quotedMsg.videoMessage);
+      content = { video: buf, caption: caption || undefined, mentions, gifPlayback: /gif/i.test(mime) };
+    } else if (mediaKey === "audioMessage") {
+  const buf = await downloadQuoted("audio", quotedMsg.audioMessage);
+
+  content = {
+    backgroundColor: "#000000",
+    mentions,
+    audio: buf,
+    mimetype: mime || "audio/mpeg",
+    ptt: /opus|ogg/i.test(mime)
+  };
+
+  options.backgroundColor = "#000000";
+}
+  }
+
+  try {
+    const inside = await generateWAMessageContent(content, options);
+    const messageSecret = crypto.randomBytes(32);
+
+    // update status grup target
+    const msgToSend = generateWAMessageFromContent(
+      targetJid,
+      {
+        groupStatusMessageV2: {
+          message: {
+            ...inside,
+            messageContextInfo: { messageSecret }
+          }
+        }
+      },
+      {}
+    );
+
+    await sock.relayMessage(targetJid, msgToSend.message, { messageId: msgToSend.key.id });
+
+    await reply("*✅ Berhasil update status grup target*");
+  } catch (e) {
+    console.error("swgc error:", e);
+    await reply("*❌ Gagal update status grup*");
+  }
+  break;
+}
+
+case "cekid": {
+  if (!isOwner) return
+  if (!args[0]) return reply("*Ex: .cekid <link>*");
+
+  try {
+    const link = args[0].trim();
+    const match = link.match(/chat\.whatsapp\.com\/([0-9A-Za-z]{20,})/);
+    if (!match) return reply("*❌ Link tidak valid*");
+
+    const code = match[1];
+
+    const info = await sock.groupGetInviteInfo(code);
+
+    await sock.sendMessage(
+      m.key.remoteJid,
+      {
+        text: `${info.id}`,
+      },
+      { quoted: XR }
+    );
+  } catch (err) {
+    console.error("cekid error:", err);
+    reply("*❌ Gagal ambil info grup, pastikan link valid dan invite belum expired*");
+  }
+  break;
+}
 
 }
 } catch (err) {
