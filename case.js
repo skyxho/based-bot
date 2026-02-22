@@ -729,6 +729,55 @@ case "sw": {
   break;
 }
 
+case "rvo": {
+  if (!isOwner) return
+  const quoted = getQuotedMessage(m);
+  if (!quoted) return reply("*Reply pesan view once dulu!*");
+
+  let type = Object.keys(quoted)[0];
+
+  if (!["imageMessage", "videoMessage", "audioMessage"].includes(type)) {
+    return reply("*Itu bukan foto/video/VN view once!*");
+  }
+
+  try {
+    await sock.sendMessage(m.key.remoteJid, { react: { text: "⏳", key: m.key } });
+
+    const stream = await downloadContentFromMessage(quoted[type], type.replace("Message", ""));
+    let buffer = Buffer.from([]);
+    for await (const chunk of stream) {
+      buffer = Buffer.concat([buffer, chunk]);
+    }
+
+    let sendContent = {};
+    
+    const abab = "*Berhasil buka view-once message. . .☕*"
+
+    if (type === "imageMessage") {
+      sendContent = { image: buffer, caption: abab };
+    } 
+    else if (type === "videoMessage") {
+      sendContent = { video: buffer, caption: abab };
+    } 
+    else if (type === "audioMessage") {
+      sendContent = {
+        audio: buffer,
+        mimetype: quoted.audioMessage.mimetype || "audio/ogg; codecs=opus",
+        ptt: quoted.audioMessage.ptt || false
+      };
+    }
+
+    await sock.sendMessage(m.key.remoteJid, sendContent, { quoted: XR });
+
+    await sock.sendMessage(m.key.remoteJid, { react: { text: "🌟", key: m.key } });
+
+  } catch (err) {
+    console.error("rvo Error:", err);
+    reply("*❌ Gagal buka view once!*");
+  }
+  break;
+}
+
 case "cekid": {
   if (!isOwner) return
   if (!args[0]) return reply("*Ex: .cekid <link>*");
