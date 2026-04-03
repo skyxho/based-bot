@@ -22,7 +22,9 @@ import chalk from "chalk";
 import axios from "axios";
 import https from "https";
 import util from "util";
-import fs from "fs";
+import fs from "fs"
+
+const path = "./utils/blacklist.json"
 
 export default async function handleMessage(sock, msgUpdate) {
 try {
@@ -109,6 +111,40 @@ const downloadQuoted = async (type, message) => {
 };
 
  // ======== FUNCTION ======== //
+function loadBlacklist() {
+  if (!fs.existsSync(path)) fs.writeFileSync(path, "[]")
+  return JSON.parse(fs.readFileSync(path))
+}
+
+function saveBlacklist(data) {
+  fs.writeFileSync(path, JSON.stringify(data, null, 2))
+}
+
+function cleanExpired() {
+  let data = loadBlacklist()
+  let now = Date.now()
+
+  data = data.filter(x => now < x.expired)
+  saveBlacklist(data)
+
+  return data
+}
+
+function getBlacklist() {
+  if (!fs.existsSync(path)) return []
+  return JSON.parse(fs.readFileSync(path))
+}
+
+let blacklist = getBlacklist()
+
+let isSticker = m.mtype === "stickerMessage"
+
+let banned = blacklist.find(x => x.jid === m.sender && Date.now() < x.expired)
+
+if (banned && isSticker) {
+  return
+}
+
 function runtime(uptimeSeconds) {
   const hours = Math.floor(uptimeSeconds / 3600);
   const minutes = Math.floor((uptimeSeconds % 3600) / 60);
@@ -579,22 +615,22 @@ case "tovn": {
     try {
         const ctx = msg.message?.extendedTextMessage?.contextInfo;
 
-        // react loading
+        if (!ctx?.quotedMessage?.audioMessage) {
+            return reply("⚠️ Reply ke pesan audio dulu!");
+        }
+
         await sock.sendMessage(m.key.remoteJid, { react: { text: "⏳", key: m.key } });
 
-        // download audio
-        const stream = await downloadContentFromMessage(ctx.quotedMessage, "audio");
+        const stream = await downloadContentFromMessage(ctx.quotedMessage.audioMessage, "audio");
         let buffer = Buffer.from([]);
         for await (const chunk of stream) buffer = Buffer.concat([buffer, chunk]);
 
-        // temp file
         const tempDir = path.resolve("./temp");
         await fs.promises.mkdir(tempDir, { recursive: true });
         const audioPath = path.join(tempDir, `input_${Date.now()}.ogg`);
         const opusPath = path.join(tempDir, `output_${Date.now()}.opus`);
         await fs.promises.writeFile(audioPath, buffer);
 
-        // convert ke opus
         await new Promise((resolve, reject) => {
             const ffmpeg = spawn("ffmpeg", [
                 "-i", audioPath,
@@ -612,121 +648,20 @@ case "tovn": {
             ffmpeg.on("error", reject);
         });
 
-        // kirim VN
         await sock.sendMessage(m.key.remoteJid, {
-            audio: fs.readFileSync(opusPath),
+            audio: await fs.promises.readFile(opusPath),
             mimetype: "audio/ogg; codecs=opus",
             ptt: true
         }, { quoted: msg });
 
-        // cleanup
         await fs.promises.unlink(audioPath).catch(() => {});
         await fs.promises.unlink(opusPath).catch(() => {});
 
     } catch (err) {
-        console.error("❌ ToVn Error:", err);
-        reply(`*⚠️ Gagal ubah ke VN:* ${err.message}`);
+        console.error("❌ To Voice note Error:", err);
+        reply(`*⚠️ Gagal ubah ke Voice note:* ${err.message}`);
     }
     break;
-}
-
-case "sw": {
-  if (!isOwner) return reply("*Owner only*");
-
-  if (args.length < 1) return reply("*example: .swgc 120363333246957858@g.us Hallo semua*");
-
-  let targetJid = args[0];
-  if (!targetJid.endsWith("@g.us")) return reply("*ID grup tidak valid (@g.us)*");
-
-  let caption = args.slice(1).join(" ").trim();
-
-  const options = { upload: sock.waUploadToServer };
-  let content = {};
-
-  let quotedMsg = getQuotedMessage(m);
-
-  // ambil metadata target grup untuk mentions
-  let mentions = [];
-  try {
-    const metadata = await sock.groupMetadata(targetJid);
-    mentions = metadata.participants.map(p => p.id);
-  } catch (e) {
-    console.error("Metadata grup error:", e);
-  }
-
-  let directMsg = m.message;
-  if (directMsg?.ephemeralMessage) directMsg = directMsg.ephemeralMessage.message;
-  if (directMsg?.viewOnceMessage || directMsg?.viewOnceMessageV2) {
-    directMsg = (directMsg.viewOnceMessage || directMsg.viewOnceMessageV2).message;
-  }
-
-  if (!quotedMsg) {
-    if (directMsg?.imageMessage) quotedMsg = { imageMessage: directMsg.imageMessage };
-    else if (directMsg?.videoMessage) quotedMsg = { videoMessage: directMsg.videoMessage };
-    else if (directMsg?.audioMessage) quotedMsg = { audioMessage: directMsg.audioMessage };
-  }
-
-  if (!quotedMsg) {
-    content = { text: caption || " ", mentions };
-    options.backgroundColor = "#000000";
-  } else {
-    const mediaKey =
-      quotedMsg.imageMessage ? "imageMessage" :
-      quotedMsg.videoMessage ? "videoMessage" :
-      quotedMsg.audioMessage ? "audioMessage" :
-      null;
-
-    if (!mediaKey) return reply("*reply media untuk .swgc*");
-
-    const mime = quotedMsg[mediaKey]?.mimetype || "";
-
-    if (mediaKey === "imageMessage") {
-      const buf = await downloadQuoted("image", quotedMsg.imageMessage);
-      content = { image: buf, caption: caption || undefined, mentions };
-    } else if (mediaKey === "videoMessage") {
-      const buf = await downloadQuoted("video", quotedMsg.videoMessage);
-      content = { video: buf, caption: caption || undefined, mentions, gifPlayback: /gif/i.test(mime) };
-    } else if (mediaKey === "audioMessage") {
-  const buf = await downloadQuoted("audio", quotedMsg.audioMessage);
-
-  content = {
-    backgroundColor: "#000000",
-    mentions,
-    audio: buf,
-    mimetype: mime || "audio/mpeg",
-    ptt: /opus|ogg/i.test(mime)
-  };
-
-  options.backgroundColor = "#000000";
-}
-  }
-
-  try {
-    const inside = await generateWAMessageContent(content, options);
-    const messageSecret = crypto.randomBytes(32);
-
-    // update status grup target
-    const msgToSend = generateWAMessageFromContent(
-      targetJid,
-      {
-        groupStatusMessageV2: {
-          message: {
-            ...inside,
-            messageContextInfo: { messageSecret }
-          }
-        }
-      },
-      {}
-    );
-
-    await sock.relayMessage(targetJid, msgToSend.message, { messageId: msgToSend.key.id });
-
-    await reply("*✅ Berhasil update status grup target*");
-  } catch (e) {
-    console.error("swgc error:", e);
-    await reply("*❌ Gagal update status grup*");
-  }
-  break;
 }
 
 case "rvo": {
@@ -804,8 +739,8 @@ case "cekid": {
   }
   break;
 }
-
 }
+
 } catch (err) {
 console.error("⚠️ Error di case.js :", err);
 }
